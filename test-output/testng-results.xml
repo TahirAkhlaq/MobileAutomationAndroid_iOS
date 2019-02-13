@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
+  <reporter-output>
+    <line>
+      <![CDATA[HomeScree Lauched]]>
+    </line>
+    <line>
+      <![CDATA[pop cliked]]>
+    </line>
+  </reporter-output>
+  <suite name="Default suite" duration-ms="25411" started-at="2019-02-11T12:22:01Z" finished-at="2019-02-11T12:22:27Z">
+    <groups>
+    </groups>
+    <test name="Default test" duration-ms="25411" started-at="2019-02-11T12:22:01Z" finished-at="2019-02-11T12:22:27Z">
+      <class name="com.abp_android.test.AbpHomeTest">
+        <test-method status="PASS" signature="capabilities()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]" name="capabilities" is-config="true" duration-ms="7221" started-at="2019-02-11T12:22:01Z" finished-at="2019-02-11T12:22:08Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- capabilities -->
+        <test-method status="PASS" signature="fMethod()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]" name="fMethod" duration-ms="18161" started-at="2019-02-11T12:22:08Z" finished-at="2019-02-11T12:22:27Z">
+          <reporter-output>
+            <line>
+              <![CDATA[HomeScree Lauched]]>
+            </line>
+            <line>
+              <![CDATA[pop cliked]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- fMethod -->
+        <test-method status="PASS" signature="postCondition()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]" name="postCondition" is-config="true" duration-ms="1" started-at="2019-02-11T12:22:27Z" finished-at="2019-02-11T12:22:27Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- postCondition -->
+      </class> <!-- com.abp_android.test.AbpHomeTest -->
+    </test> <!-- Default test -->
+  </suite> <!-- Default suite -->
+</testng-results>
