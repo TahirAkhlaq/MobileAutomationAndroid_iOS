@@ -6,6 +6,7 @@ package com.abp_android.pom;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.aspectj.weaver.WeaverStateInfo;
 import org.openqa.selenium.WebElement;
@@ -25,18 +26,28 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
+import io.appium.java_client.ios.IOSDriver;
+import io.appium.java_client.ios.IOSElement;
 import io.appium.java_client.pagefactory.AndroidBy;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import io.appium.java_client.pagefactory.iOSFindBy;
+import io.appium.java_client.pagefactory.iOSXCUITFindAll;
+import io.appium.java_client.pagefactory.iOSXCUITFindBy;
+
 import org.testng.Reporter;
 
 /**
  * @author bluepi
+ * 
  *
+ * 
+ * 
  */
 public class AbpHomePage {
 	WaitStatementLib wLib;
 	// Terms pop up
+	@iOSXCUITFindBy( id = "ABP न्यूज़ (Hindi)")
 	@AndroidFindBy(uiAutomator = ("new UiSelector().text(\"ABP न्यूज़ (Hindi)\")"))
 	WebElement hindiLanguage;
 
@@ -52,7 +63,8 @@ public class AbpHomePage {
 
 	@AndroidFindBy(xpath = "//android.widget.Button[@text='OK']")
 	private WebElement okBtn;
-
+	
+	@iOSXCUITFindBy(xpath ="//XCUIElementTypeOther[@name=\"ABP Live \"]/XCUIElementTypeScrollView/XCUIElementTypeOther/XCUIElementTypeOther[2]/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther/XCUIElementTypeOther\n")
 	@AndroidFindBy(xpath = "com.android.packageinstaller:id/permission_allow_button")
 	private WebElement permissionPopUp;
 
@@ -100,6 +112,11 @@ public class AbpHomePage {
 		super();
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 	}
+	
+	public AbpHomePage(IOSDriver<IOSElement> idriver) {
+		super();
+		PageFactory.initElements(new AppiumFieldDecorator(idriver), this);
+	}
 
 	public void clickPopUp(AndroidDriver<AndroidElement> driver) throws InterruptedException {
 
@@ -119,7 +136,7 @@ public class AbpHomePage {
 		Reporter.log("Back Key Pressed", true);
 	}
 
-	public void article(AndroidDriver<AndroidElement> driver) throws InterruptedException {
+	public void article(AndroidDriver<AndroidElement> driver) {
 		// driver.findElementByAndroidUIAutomator(("new UiSelector().text(\"ABP न्यूज़
 		// (Hindi)\")")).click();
 		hindiLanguage.click();
@@ -153,5 +170,15 @@ public class AbpHomePage {
 			Reporter.log("Back Key Pressed", true);
 		}
 
+	}
+
+	public void iOSMethod(IOSDriver<IOSElement> idriver) {
+		//permissionPopUp.click();
+		hindiLanguage.click();
+		System.out.println("clicked");
+	/*	idriver.findElementByAccessibilityId("Alert Views").click();
+		idriver.findElementByXPath("//*[@value='Text Entry']").click();
+		idriver.findElementByClassName("XCUIElementTypeTextField").sendKeys("Hello");
+		idriver.findElementByName("OK").click();*/
 	}
 }
