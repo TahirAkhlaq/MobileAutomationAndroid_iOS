@@ -19,7 +19,7 @@ import io.appium.java_client.touch.offset.PointOption;
  */
 public class Utility {
 
-	public static void scroll(AndroidDriver<AndroidElement> driver) {
+	public static void scrollVertical(AndroidDriver<AndroidElement> driver) {
 		Dimension size = driver.manage().window().getSize();
 		/*
 		 * System.out.println(size.height + "height"); System.out.println(size.width +

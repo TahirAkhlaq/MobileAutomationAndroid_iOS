@@ -1,0 +1,695 @@
+[1mdiff --git a/src/main/java/com/abp_android/generic/AppiumServerLib.java b/src/main/java/com/abp_android/generic/AppiumServerLib.java[m
+[1mindex 981fc28..341df7b 100644[m
+[1m--- a/src/main/java/com/abp_android/generic/AppiumServerLib.java[m
+[1m+++ b/src/main/java/com/abp_android/generic/AppiumServerLib.java[m
+[36m@@ -3,6 +3,7 @@[m
+  */[m
+ package com.abp_android.generic;[m
+ [m
+[32m+[m[32mimport java.io.File;[m
+ import java.io.IOException;[m
+ import java.net.ServerSocket;[m
+ [m
+[36m@@ -22,13 +23,25 @@[m [mpublic class AppiumServerLib {[m
+ 	private DesiredCapabilities cap;[m
+ 	[m
+ 	public void startServer() {[m
+[32m+[m	[32m/*[m[41m	[m
+[32m+[m		[32mAppiumServiceBuilder builder = new AppiumServiceBuilder()[m
+[32m+[m[32m                .withAppiumJS(new File("/home/bluepi/.linuxbrew/Cellar/node/11.9.0/bin/node"));[m
+[32m+[m[41m                [m
+[32m+[m		[32mservice = builder.build();[m
+[32m+[m		[32mservice.start();*/[m
+[32m+[m[41m		[m
+[32m+[m[41m		[m
+[32m+[m[41m		[m
+[32m+[m[41m		[m
+[32m+[m[41m		[m
+[32m+[m[41m		[m
+ 		//Set Capabilities[m
+ 		cap = new DesiredCapabilities();[m
+ 		cap.setCapability("noReset", "false");[m
+ 		[m
+ 		//Build the Appium service[m
+[31m-		builder = new AppiumServiceBuilder();[m
+[31m-		builder.withIPAddress("127.0.0.0");[m
+[32m+[m		[32mbuilder = new AppiumServiceBuilder();//.withAppiumJS(new File("/usr/bin/node"));[m
+[32m+[m		[32mbuilder.withIPAddress("0.0.0.0");[m
+ 		builder.usingPort(4723);[m
+ 		builder.withCapabilities(cap);[m
+ 		builder.withArgument(GeneralServerFlag.SESSION_OVERRIDE);[m
+[36m@@ -37,9 +50,7 @@[m [mpublic class AppiumServerLib {[m
+ 		//Start the server with the builder[m
+ 		service = AppiumDriverLocalService.buildService(builder);[m
+ 		service.start();[m
+[31m-		//AppiumDriverLocalService [m
+[31m-		/*service = AppiumDriverLocalService.buildDefaultService();[m
+[31m-		service.start();*/[m
+[32m+[m[41m	[m
+ 	}[m
+ 	[m
+ 	public void stopServer() {[m
+[1mdiff --git a/src/main/java/com/abp_android/generic/Utility.java b/src/main/java/com/abp_android/generic/Utility.java[m
+[1mindex aafbba4..372972b 100644[m
+[1m--- a/src/main/java/com/abp_android/generic/Utility.java[m
+[1m+++ b/src/main/java/com/abp_android/generic/Utility.java[m
+[36m@@ -19,7 +19,7 @@[m [mimport io.appium.java_client.touch.offset.PointOption;[m
+  */[m
+ public class Utility {[m
+ [m
+[31m-	public static void scroll(AndroidDriver<AndroidElement> driver) {[m
+[32m+[m	[32mpublic static void scrollVertical(AndroidDriver<AndroidElement> driver) {[m
+ 		Dimension size = driver.manage().window().getSize();[m
+ 		/*[m
+ 		 * System.out.println(size.height + "height"); System.out.println(size.width +[m
+[1mdiff --git a/src/main/java/com/abp_android/generic/WaitStatementLib.java b/src/main/java/com/abp_android/generic/WaitStatementLib.java[m
+[1mindex 7c0ea1e..d866b26 100644[m
+[1m--- a/src/main/java/com/abp_android/generic/WaitStatementLib.java[m
+[1m+++ b/src/main/java/com/abp_android/generic/WaitStatementLib.java[m
+[36m@@ -19,7 +19,7 @@[m [mpublic class WaitStatementLib {[m
+ 	[m
+ 	public WebDriverWait wait;[m
+ 	public FluentWait<WebDriver> fw;[m
+[31m-[m
+[32m+[m[41m	[m
+ 	public void explicitWait(WebDriver driver, int time, WebElement element) {[m
+ 		wait = new WebDriverWait(driver, time);[m
+ 		wait.until(ExpectedConditions.visibilityOf(element));[m
+[36m@@ -29,4 +29,10 @@[m [mpublic class WaitStatementLib {[m
+ 		driver.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);[m
+ 	}[m
+ [m
+[32m+[m	[32mpublic void elementVisible(WebElement element) {[m
+[32m+[m		[32mwait.until(ExpectedConditions.visibilityOf(element));[m
+[32m+[m	[32m}[m
+[32m+[m	[32mpublic void elementClickble(WebElement element) {[m
+[32m+[m		[32mwait.until(ExpectedConditions.elementToBeClickable(element));[m
+[32m+[m	[32m}[m
+ }[m
+[1mdiff --git a/src/main/java/com/abp_android/pom/AbpHomePage.java b/src/main/java/com/abp_android/pom/AbpHomePage.java[m
+[1mindex 3e07596..3735592 100644[m
+[1m--- a/src/main/java/com/abp_android/pom/AbpHomePage.java[m
+[1m+++ b/src/main/java/com/abp_android/pom/AbpHomePage.java[m
+[36m@@ -9,7 +9,7 @@[m [mimport java.util.List;[m
+ [m
+ import org.openqa.selenium.WebElement;[m
+ import org.openqa.selenium.support.PageFactory;[m
+[31m-import org.testng.Reporter;[m
+[32m+[m[32mimport org.openqa.selenium.support.ui.ExpectedConditions;[m
+ [m
+ import com.abp_android.generic.Utility;[m
+ import com.abp_android.generic.WaitStatementLib;[m
+[36m@@ -24,32 +24,28 @@[m [mimport io.appium.java_client.android.AndroidDriver;[m
+ import io.appium.java_client.android.AndroidElement;[m
+ import io.appium.java_client.android.nativekey.AndroidKey;[m
+ import io.appium.java_client.android.nativekey.KeyEvent;[m
+[32m+[m[32mimport io.appium.java_client.pagefactory.AndroidBy;[m
+ import io.appium.java_client.pagefactory.AndroidFindBy;[m
+ import io.appium.java_client.pagefactory.AppiumFieldDecorator;[m
+[32m+[m[32mimport org.testng.Reporter;[m
+ [m
+ /**[m
+  * @author bluepi[m
+  *[m
+  */[m
+ public class AbpHomePage {[m
+[32m+[m	[32mWaitStatementLib wLib;[m
+ 	// Terms pop up[m
+[31m-	@AndroidFindBy(id = "android:id/button1")[m
+[31m-	private WebElement btn;[m
+[31m-	public WaitStatementLib wLib;[m
+[31m-	// public Gesture g = new Gesture();[m
+[31m-[m
+[31m-	// Lanhuage Options[m
+[31m-[m
+[31m-//	@FindBy(xpath="[contains(text(),'ABP à¤¨à¥à¤¯à¥à¥ (Hindi)']")[m
+[31m-	// private WebElement hindiLanguage;[m
+[31m-[m
+[31m-//	@AndroidFindBy(xpath="")[m
+[31m-//	private WebElement englishLanguage;[m
+[31m-//	[m
+[32m+[m	[32m@AndroidFindBy(uiAutomator = ("new UiSelector().text(\"ABP न्यूज़ (Hindi)\")"))[m
+[32m+[m	[32mWebElement hindiLanguage;[m
+ [m
+[32m+[m	[32m@AndroidFindBy(uiAutomator = ("new UiSelector().text(\"LIVE BLOG | ABP News Bureau\")"))[m
+[32m+[m	[32mWebElement liveBlogTxt;[m
+ 	@AndroidFindBy(id = "android:id/button1")[m
+[31m-	private WebElement accessPermission;[m
+[32m+[m	[32mprivate WebElement btn;[m
+ [m
+[32m+[m	[32m@AndroidFindBy(uiAutomator = ("new UiSelector().text(\"OK\")"))[m
+[32m+[m	[32mWebElement okBtn1;[m
+ 	@AndroidFindBy(id = "com.android.packageinstaller:id/permission_allow_button")[m
+ 	private WebElement allowBtn;[m
+ [m
+[36m@@ -74,6 +70,9 @@[m [mpublic class AbpHomePage {[m
+ 	@AndroidFindBy(id = "com.winit.starnews.hin:id/tvShowName")[m
+ 	private WebElement tvShowName;[m
+ [m
+[32m+[m	[32m@AndroidFindBy(id = "com.winit.starnews.hin:id/tvShowHeaderText")[m
+[32m+[m	[32mWebElement tvShowHeadlinName;[m
+[32m+[m
+ 	@AndroidFindBy(id = "com.winit.starnews.hin:id/newsHeadingText")[m
+ 	private List<WebElement> headlinesCount;[m
+ [m
+[36m@@ -81,23 +80,31 @@[m [mpublic class AbpHomePage {[m
+ 	private WebElement Img;[m
+ [m
+ 	@AndroidFindBy(xpath = "android.widget.LinearLayout[@index='1']")[m
+[31m-	private WebElement cd;[m
+[32m+[m	[32mWebElement qa;[m
+[32m+[m	[32m// private WebElement cd;[m
+ [m
+ 	@AndroidFindBy(xpath = "android.widget.LinearLayout[@index='0']")[m
+ 	private WebElement HindiLangIndex;[m
+ [m
+[31m-//	@AndroidFindBy(Recommended by Colombia)[m
+[32m+[m	[32m@AndroidFindBy(id = "com.winit.starnews.hin:id/tvChannel")[m
+[32m+[m	[32mWebElement getLiveBlogCategoryName;[m
+[32m+[m
+[32m+[m	[32m@AndroidFindBy(id = "com.winit.starnews.hin:id/sectionTextview")[m
+[32m+[m	[32mWebElement getArticleCategoryName;[m
+[32m+[m
+[32m+[m	[32m@AndroidFindBy(id = "com.winit.starnews.hin:id/recentVideoTitleTextView")[m
+[32m+[m	[32mWebElement getVideoTitleName;[m
+[32m+[m
+ 	public AbpHomePage(AndroidDriver<AndroidElement> driver) {[m
+ 		super();[m
+ 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);[m
+ 	}[m
+ [m
+[31m-	public void clickPopUp(AndroidDriver<AndroidElement> driver) throws MalformedURLException {[m
+[32m+[m	[32mpublic void clickPopUp(AndroidDriver<AndroidElement> driver) throws InterruptedException {[m
+ [m
+[31m-		driver.findElementByAndroidUIAutomator(("new UiSelector().text(\"ABP न्यूज़ (Hindi)\")")).click();[m
+[31m-		wLib = new WaitStatementLib();[m
+[31m-		btn.click();[m
+[32m+[m		[32mhindiLanguage.click();[m
+ [m
+[32m+[m		[32mokBtn1.click();[m
+ 		Reporter.log("HomeScree Lauched", true);[m
+ 		allowBtn.click();[m
+ 		allowBtn.click();[m
+[36m@@ -110,45 +117,60 @@[m [mpublic class AbpHomePage {[m
+ [m
+ 		Reporter.log("Title Of Tv Show is :" + tvShowName.getText(), true);[m
+ [m
+[32m+[m		[32mReporter.log("Headline Of Tv Show is :" + tvShowHeadlinName.getText());[m
+[32m+[m
+ 		((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.BACK));[m
+ 		Reporter.log("Back Key Pressed", true);[m
+ [m
+ 	}[m
+ [m
+[31m-	public void article(AndroidDriver<AndroidElement> driver) throws IOException {[m
+[31m-		driver.findElementByAndroidUIAutomator(("new UiSelector().text(\"ABP न्यूज़ (Hindi)\")")).click();[m
+[31m-		//HindiLangIndex.click();[m
+[31m-		wLib = new WaitStatementLib();[m
+[31m-		btn.click();[m
+[32m+[m	[32mpublic void article(AndroidDriver<AndroidElement> driver) throws InterruptedException {[m
+[32m+[m		[32m// driver.findElementByAndroidUIAutomator(("new UiSelector().text(\"ABP न्यूज़[m
+[32m+[m		[32m// (Hindi)\")")).click();[m
+[32m+[m		[32mhindiLanguage.click();[m
+[32m+[m		[32mokBtn1.click();[m
+ [m
+[31m-		Reporter.log("HomeScree Lauched", true);[m
+[32m+[m		[32mReporter.log("HomeScreen Lauched", true);[m
+ 		allowBtn.click();[m
+ 		allowBtn.click();[m
+[31m-		Reporter.log("pop cliked", true);[m
+[31m-	//	driver.executeScript("mobile: scroll", ImmutableMap.of("direction", "down"));[m
+[31m-		[m
+[31m-		for (int i = 0; i < 20; i++) {[m
+[31m-			Utility.scroll(driver);[m
+[31m-		}[m
+[31m-		[m
+[31m-	/*	for (WebElement webElement : headlinesCount) {[m
+[32m+[m		[32mReporter.log("Cliked on Permission Pop", true);[m
+[32m+[m
+[32m+[m		[32mfor (WebElement webElement : headlinesCount) {[m
+ 			Reporter.log(webElement.getText());[m
+ 			webElement.click();[m
+[32m+[m
+[32m+[m			[32m/*[m
+[32m+[m			[32m * Reporter.log("Category name is " + getArticleCategoryName.getText(), true);[m
+[32m+[m			[32m * Reporter.log("Category Name Is " + getVideoTitleName.getText(), true);[m
+[32m+[m			[32m */[m
+ 			try {[m
+[31m-				Img.isDisplayed();[m
+[31m-				new TouchAction(driver).tap(tapOptions().withElement(element(Img))).perform();[m
+[31m-				Reporter.log("CLick on Thumb Image performed", true);				[m
+[31m-				Utility.scroll(driver);[m
+[31m-				//driver.findElementByAndroidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Recommended by Colombia\"));");	[m
+[31m-			} [m
+[31m-			catch (Exception e) {[m
+[31m-				Utility.scroll(driver);[m
+[31m-				Reporter.log("Thumb Image Not Found", true);			[m
+[32m+[m				[32mif (Img.isDisplayed()) {[m
+[32m+[m					[32mnew TouchAction(driver).tap(tapOptions().withElement(element(Img))).perform();[m
+[32m+[m
+[32m+[m					[32mReporter.log("CLick on Thumb Image performed", true);[m
+[32m+[m					[32mReporter.log("Category name is " + getArticleCategoryName.getText(), true);[m
+[32m+[m				[32m} else {[m
+[32m+[m					[32mReporter.log("Category name is " + getArticleCategoryName.getText(), true);[m
+[32m+[m				[32m}[m
+[32m+[m				[32m// Reporter.log("Category name is " + getArticleCategoryName.getText(), true);[m
+[32m+[m				[32mdriver.findElementByAndroidUIAutomator([m
+[32m+[m						[32m"new UiScrollable(new UiSelector()).scrollIntoView(text(\"Recommended by Colombia\"));");[m
+[32m+[m			[32m} catch (Exception e) {[m
+[32m+[m
+[32m+[m				[32m// Reporter.log("Category name is" + liveBlogTxt.getText(), true);[m
+[32m+[m				[32mfor (int i = 0; i < 22; i++) {[m
+[32m+[m					[32mUtility.scrollVertical(driver);[m
+[32m+[m				[32m}[m
+[32m+[m				[32mReporter.log("Thumb Image Not Found", true);[m
+[32m+[m
+ 			}[m
+[31m-				Reporter.log("Out From TRY-Catch", true);[m
+[31m-			[m
+[32m+[m
+[32m+[m			[32mReporter.log("Seraching The Articles", true);[m
+[32m+[m
+ 			((AndroidDriver) driver).pressKey(new KeyEvent(AndroidKey.BACK));[m
+[31m-		//	Reporter.log("Back Key Pressed", true);[m
+[31m-		}*/[m
+[32m+[m			[32mReporter.log("Back Key Pressed", true);[m
+[32m+[m
+[32m+[m		[32m}[m
+[32m+[m
+ 	}[m
+ }[m
+[1mdiff --git a/src/test/java/com/abp_android/test/AbpHomeTest.java b/src/test/java/com/abp_android/test/AbpHomeTest.java[m
+[1mindex 674b60b..7d28101 100644[m
+[1m--- a/src/test/java/com/abp_android/test/AbpHomeTest.java[m
+[1m+++ b/src/test/java/com/abp_android/test/AbpHomeTest.java[m
+[36m@@ -4,9 +4,6 @@[m
+ package com.abp_android.test;[m
+ [m
+ import org.testng.annotations.Test;[m
+[31m-import java.io.IOException;[m
+[31m-[m
+[31m-import org.testng.annotations.Test;[m
+ [m
+ import com.abp_android.generic.BaseLib;[m
+ import com.abp_android.pom.AbpHomePage;[m
+[36m@@ -19,16 +16,24 @@[m [mpublic class AbpHomeTest extends BaseLib {[m
+ [m
+ 	/**[m
+ 	 * @param args[m
+[31m-	 * @throws IOException [m
+[32m+[m	[32m * @throws IOException[m
+ 	 */[m
+[32m+[m[41m	[m
+[32m+[m
+ 	@Test[m
+[31m-	public void fMethod() throws IOException {[m
+[32m+[m	[32mpublic void fMethod() throws InterruptedException {[m
+ 		AbpHomePage ab = new AbpHomePage(driver);[m
+ 		wLib.implicitWaitForSeconds(driver, 10);[m
+[31m-	//	ab.clickPopUp(driver);[m
+[32m+[m		[32m// ab.clickPopUp(driver);[m
+ 		ab.article(driver);[m
+[31m-		[m
+[31m-	[m
+[32m+[m
+[32m+[m	[32m}[m
+[32m+[m
+[32m+[m[32m//	@Test(priority=1)[m
+[32m+[m	[32mpublic void verifyHeaders() throws InterruptedException {[m
+[32m+[m		[32mAbpHomePage ab = new AbpHomePage(driver);[m
+[32m+[m		[32mwLib.implicitWaitForSeconds(driver, 10);[m
+[32m+[m		[32mab.clickPopUp(driver);[m
+ 	}[m
+ [m
+ }[m
+[1mdiff --git a/test-output/Default suite/Default test.html b/test-output/Default suite/Default test.html[m
+[1mindex d0957b8..a59bc8c 100644[m
+[1m--- a/test-output/Default suite/Default test.html[m	
+[1m+++ b/test-output/Default suite/Default test.html[m	
+[36m@@ -57,9 +57,9 @@[m [mfunction toggleAllBoxes() {[m
+ <tr>[m
+ <td>Tests passed/Failed/Skipped:</td><td>1/0/0</td>[m
+ </tr><tr>[m
+[31m-<td>Started on:</td><td>Mon Feb 11 17:52:01 IST 2019</td>[m
+[32m+[m[32m<td>Started on:</td><td>Fri Feb 15 16:54:12 IST 2019</td>[m
+ </tr>[m
+[31m-<tr><td>Total time:</td><td>25 seconds (25411 ms)</td>[m
+[32m+[m[32m<tr><td>Total time:</td><td>129 seconds (129566 ms)</td>[m
+ </tr><tr>[m
+ <td>Included groups:</td><td></td>[m
+ </tr><tr>[m
+[36m@@ -76,16 +76,32 @@[m [mfunction toggleAllBoxes() {[m
+ </tr>[m
+ <tr>[m
+ <td title='com.abp_android.test.AbpHomeTest.fMethod()'><b>fMethod</b><br>Test class: com.abp_android.test.AbpHomeTest<br/>[m
+[31m-<a href="#Output-1940445711" onClick='toggleBox("Output-1940445711", this, "Show output", "Hide output");'>Show output</a>[m
+[32m+[m[32m<a href="#Output-1520387953" onClick='toggleBox("Output-1520387953", this, "Show output", "Hide output");'>Show output</a>[m
+ [m
+[31m-<a href="#Output-1940445711" onClick="toggleAllBoxes();">Show all outputs</a>[m
+[31m-<div class='log' id="Output-1940445711">[m
+[31m-HomeScree Lauched<br/>[m
+[31m-pop cliked<br/>[m
+[32m+[m[32m<a href="#Output-1520387953" onClick="toggleAllBoxes();">Show all outputs</a>[m
+[32m+[m[32m<div class='log' id="Output-1520387953">[m
+[32m+[m[32mHomeScreen Lauched<br/>[m
+[32m+[m[32mCliked on Permission Pop<br/>[m
+[32m+[m[32mपुलवामा हमला LIVE UPDATES: गृहमंत्री राजनाथ सिंह ने अमर जवानों को दी श्रद्धांजलि, शहीदों को दिया कंधा<br/>[m
+[32m+[m[32mThumb Image Not Found<br/>[m
+[32m+[m[32mSeraching The Articles<br/>[m
+[32m+[m[32mBack Key Pressed<br/>[m
+[32m+[m[32mक्या वाकई एएमयू छात्र ने कहा- हाऊ इज द जैश, ग्रेट सर? जानिए पूरा सच<br/>[m
+[32m+[m[32mThumb Image Not Found<br/>[m
+[32m+[m[32mSeraching The Articles<br/>[m
+[32m+[m[32mBack Key Pressed<br/>[m
+[32m+[m[32mपुलवामा हमला: भारत ने पाकिस्तानी उच्चायुक्त को किया तलब, भारतीय उच्चायुक्त को भी दिल्ली बुलाया<br/>[m
+[32m+[m[32mThumb Image Not Found<br/>[m
+[32m+[m[32mSeraching The Articles<br/>[m
+[32m+[m[32mBack Key Pressed<br/>[m
+[32m+[m[32mदेवरिया: शहीद विजय की पत्‍नी को पति पर गर्व, सीएम योगी को बुलाने की मांग पर अड़े ग्रामीण<br/>[m
+[32m+[m[32mThumb Image Not Found<br/>[m
+[32m+[m[32mSeraching The Articles<br/>[m
+[32m+[m[32mBack Key Pressed<br/>[m
+ </div>[m
+ </td>[m
+ <td></td>[m
+[31m-<td>18</td>[m
+[32m+[m[32m<td>122</td>[m
+ <td>com.abp_android.test.AbpHomeTest@5f2108b5</td></tr>[m
+ </table><p>[m
+ </body>[m
+[1mdiff --git a/test-output/Default suite/Default test.xml b/test-output/Default suite/Default test.xml[m
+[1mindex 0b70dad..4fdd8ec 100644[m
+[1m--- a/test-output/Default suite/Default test.xml[m	
+[1m+++ b/test-output/Default suite/Default test.xml[m	
+[36m@@ -1,5 +1,5 @@[m
+ <?xml version="1.0" encoding="UTF-8"?>[m
+ <!-- Generated by org.testng.reporters.JUnitXMLReporter -->[m
+[31m-<testsuite hostname="bluepi-HP-EliteBook-840-G1" ignored="0" name="Default test" tests="1" failures="0" timestamp="11 Feb 2019 12:22:27 GMT" time="25.411" errors="0">[m
+[31m-  <testcase name="fMethod" time="18.161" classname="com.abp_android.test.AbpHomeTest"/>[m
+[32m+[m[32m<testsuite hostname="bluepi-HP-EliteBook-840-G1" ignored="0" name="Default test" tests="1" failures="0" timestamp="15 Feb 2019 11:26:21 GMT" time="129.566" errors="0">[m
+[32m+[m[32m  <testcase name="fMethod" time="122.412" classname="com.abp_android.test.AbpHomeTest"/>[m
+ </testsuite> <!-- Default test -->[m
+[1mdiff --git a/test-output/emailable-report.html b/test-output/emailable-report.html[m
+[1mindex 45c8951..a296bec 100644[m
+[1m--- a/test-output/emailable-report.html[m
+[1m+++ b/test-output/emailable-report.html[m
+[36m@@ -9,10 +9,10 @@[m
+ <table>[m
+ <tr><th>Test</th><th># Passed</th><th># Skipped</th><th># Failed</th><th>Time (ms)</th><th>Included Groups</th><th>Excluded Groups</th></tr>[m
+ <tr><th colspan="7">Default suite</th></tr>[m
+[31m-<tr><td><a href="#t0">Default test</a></td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">25,411</td><td></td><td></td></tr>[m
+[32m+[m[32m<tr><td><a href="#t0">Default test</a></td><td class="num">1</td><td class="num">0</td><td class="num">0</td><td class="num">129,566</td><td></td><td></td></tr>[m
+ </table>[m
+[31m-<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Default suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Default test &#8212; passed</th></tr><tr class="passedeven"><td rowspan="1">com.abp_android.test.AbpHomeTest</td><td><a href="#m0">fMethod</a></td><td rowspan="1">1549887728903</td><td rowspan="1">18161</td></tr></tbody>[m
+[32m+[m[32m<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Default suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">Default test &#8212; passed</th></tr><tr class="passedeven"><td rowspan="1">com.abp_android.test.AbpHomeTest</td><td><a href="#m0">fMethod</a></td><td rowspan="1">1550229859562</td><td rowspan="1">122412</td></tr></tbody>[m
+ </table>[m
+[31m-<h2>Default test</h2><h3 id="m0">com.abp_android.test.AbpHomeTest#fMethod</h3><table class="result"><tr><th>Messages</th></tr><tr><td><div class="messages">HomeScree Lauched<br/>pop cliked</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>[m
+[32m+[m[32m<h2>Default test</h2><h3 id="m0">com.abp_android.test.AbpHomeTest#fMethod</h3><table class="result"><tr><th>Messages</th></tr><tr><td><div class="messages">HomeScreen Lauched<br/>Cliked on Permission Pop<br/>पुलवामा हमला LIVE UPDATES: गृहमंत्री राजनाथ सिंह ने अमर जवानों को दी श्रद्धांजलि, शहीदों को दिया कंधा<br/>Thumb Image Not Found<br/>Seraching The Articles<br/>Back Key Pressed<br/>क्या वाकई एएमयू छात्र ने कहा- हाऊ इज द जैश, ग्रेट सर? जानिए पूरा सच<br/>Thumb Image Not Found<br/>Seraching The Articles<br/>Back Key Pressed<br/>पुलवामा हमला: भारत ने पाकिस्तानी उच्चायुक्त को किया तलब, भारतीय उच्चायुक्त को भी दिल्ली बुलाया<br/>Thumb Image Not Found<br/>Seraching The Articles<br/>Back Key Pressed<br/>देवरिया: शहीद विजय की पत्‍नी को पति पर गर्व, सीएम योगी को बुलाने की मांग पर अड़े ग्रामीण<br/>Thumb Image Not Found<br/>Seraching The Articles<br/>Back Key Pressed</div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>[m
+ </body>[m
+ </html>[m
+[1mdiff --git a/test-output/index.html b/test-output/index.html[m
+[1mindex 9c7af6a..6c0d23a 100644[m
+[1m--- a/test-output/index.html[m
+[1m+++ b/test-output/index.html[m
+[36m@@ -135,7 +135,7 @@[m
+         </div> <!-- panel Default_suite -->[m
+         <div panel-name="test-xml-Default_suite" class="panel">[m
+           <div class="main-panel-header rounded-window-top">[m
+[31m-            <span class="header-content">/tmp/testng-eclipse-963257029/testng-customsuite.xml</span>[m
+[32m+[m[32m            <span class="header-content">/tmp/testng-eclipse--1304003908/testng-customsuite.xml</span>[m
+           </div> <!-- main-panel-header rounded-window-top -->[m
+           <div class="main-panel-content rounded-window-bottom">[m
+             <pre>[m
+[36m@@ -188,12 +188,12 @@[m [mdata.addRows(1);[m
+ data.setCell(0, 0, 0)[m
+ data.setCell(0, 1, 'fMethod')[m
+ data.setCell(0, 2, 'com.abp_android.test.AbpHomeTest')[m
+[31m-data.setCell(0, 3, 18161);[m
+[32m+[m[32mdata.setCell(0, 3, 122412);[m
+ window.suiteTableData['Default_suite']= { tableData: data, tableDiv: 'times-div-Default_suite'}[m
+ return data;[m
+ }[m
+               </script>[m
+[31m-              <span class="suite-total-time">Total running time: 18 seconds</span>[m
+[32m+[m[32m              <span class="suite-total-time">Total running time: 2 minutes</span>[m
+               <div id="times-div-Default_suite">[m
+               </div> <!-- times-div-Default_suite -->[m
+             </div> <!-- times-div -->[m
+[36m@@ -207,8 +207,24 @@[m [mreturn data;[m
+             <div class="reporter-method-div">[m
+               <span class="reporter-method-name">fMethod</span>[m
+               <div class="reporter-method-output-div">[m
+[31m-                <span class="reporter-method-output">HomeScree Lauched</span>[m
+[31m-                <span class="reporter-method-output">pop cliked</span>[m
+[32m+[m[32m                <span class="reporter-method-output">HomeScreen Lauched</span>[m
+[32m+[m[32m                <span class="reporter-method-output">Cliked on Permission Pop</span>[m
+[32m+[m[32m                <span class="reporter-method-output">पुलवामा हमला LIVE UPDATES: गृहमंत्री राजनाथ सिंह ने अमर जवानों को दी श्रद्धांजलि, शहीदों को दिया कंधा</span>[m
+[32m+[m[32m                <span class="reporter-method-output">Thumb Image Not Found</span>[m
+[32m+[m[32m                <span class="reporter-method-output">Seraching The Articles</span>[m
+[32m+[m[32m                <span class="reporter-method-output">Back Key Pressed</span>[m
+[32m+[m[32m                <span class="reporter-method-output">क्या वाकई एएमयू छात्र ने कहा- हाऊ इज द जैश, ग्रेट सर? जानिए पूरा सच</span>[m
+[32m+[m[32m                <span class="reporter-method-output">Thumb Image Not Found</span>[m
+[32m+[m[32m                <span class="reporter-method-output">Seraching The Articles</span>[m
+[32m+[m[32m                <span class="reporter-method-output">Back Key Pressed</span>[m
+[32m+[m[32m                <span class="reporter-method-output">पुलवामा हमला: भारत ने पाकिस्तानी उच्चायुक्त को किया तलब, भारतीय उच्चायुक्त को भी दिल्ली बुलाया</span>[m
+[32m+[m[32m                <span class="reporter-method-output">Thumb Image Not Found</span>[m
+[32m+[m[32m                <span class="reporter-method-output">Seraching The Articles</span>[m
+[32m+[m[32m                <span class="reporter-method-output">Back Key Pressed</span>[m
+[32m+[m[32m                <span class="reporter-method-output">देवरिया: शहीद विजय की पत्‍नी को पति पर गर्व, सीएम योगी को बुलाने की मांग पर अड़े ग्रामीण</span>[m
+[32m+[m[32m                <span class="reporter-method-output">Thumb Image Not Found</span>[m
+[32m+[m[32m                <span class="reporter-method-output">Seraching The Articles</span>[m
+[32m+[m[32m                <span class="reporter-method-output">Back Key Pressed</span>[m
+               </div> <!-- reporter-method-output-div -->[m
+             </div> <!-- reporter-method-div -->[m
+           </div> <!-- main-panel-content rounded-window-bottom -->[m
+[36m@@ -233,11 +249,11 @@[m [mreturn data;[m
+               </div> <!-- configuration-method before -->[m
+               <div class="test-method">[m
+                 <span class="method-name">fMethod</span>[m
+[31m-                <span class="method-start">7221 ms</span>[m
+[32m+[m[32m                <span class="method-start">7090 ms</span>[m
+               </div> <!-- test-method -->[m
+               <div class="configuration-method after">[m
+                 <span class="method-name">postCondition</span>[m
+[31m-                <span class="method-start">25385 ms</span>[m
+[32m+[m[32m                <span class="method-start">129505 ms</span>[m
+               </div> <!-- configuration-method after -->[m
+           </div> <!-- main-panel-content rounded-window-bottom -->[m
+         </div> <!-- panel -->[m
+[1mdiff --git a/test-output/junitreports/TEST-com.abp_android.test.AbpHomeTest.xml b/test-output/junitreports/TEST-com.abp_android.test.AbpHomeTest.xml[m
+[1mindex 086de8d..b0f45fc 100644[m
+[1m--- a/test-output/junitreports/TEST-com.abp_android.test.AbpHomeTest.xml[m
+[1m+++ b/test-output/junitreports/TEST-com.abp_android.test.AbpHomeTest.xml[m
+[36m@@ -1,5 +1,5 @@[m
+ <?xml version="1.0" encoding="UTF-8"?>[m
+ <!-- Generated by org.testng.reporters.JUnitReportReporter -->[m
+[31m-<testsuite skipped="0" hostname="bluepi-HP-EliteBook-840-G1" name="com.abp_android.test.AbpHomeTest" tests="1" failures="0" timestamp="11 Feb 2019 12:22:27 GMT" time="25.383" errors="0">[m
+[31m-  <testcase name="fMethod" time="25.383" classname="com.abp_android.test.AbpHomeTest"/>[m
+[32m+[m[32m<testsuite skipped="0" hostname="bluepi-HP-EliteBook-840-G1" name="com.abp_android.test.AbpHomeTest" tests="1" failures="0" timestamp="15 Feb 2019 11:26:21 GMT" time="129.503" errors="0">[m
+[32m+[m[32m  <testcase name="fMethod" time="129.503" classname="com.abp_android.test.AbpHomeTest"/>[m
+ </testsuite> <!-- com.abp_android.test.AbpHomeTest -->[m
+[1mdiff --git a/test-output/old/Default suite/methods-alphabetical.html b/test-output/old/Default suite/methods-alphabetical.html[m
+[1mindex f79f80f..0400d69 100644[m
+[1m--- a/test-output/old/Default suite/methods-alphabetical.html[m	
+[1m+++ b/test-output/old/Default suite/methods-alphabetical.html[m	
+[36m@@ -1,10 +1,10 @@[m
+ <h2>Methods run, sorted chronologically</h2><h3>&gt;&gt; means before, &lt;&lt; means after</h3><p/><br/><em>Default suite</em><p/><small><i>(Hover the method name to see the test class name)</i></small><p/>[m
+ <table border="1">[m
+ <tr><th>Time</th><th>Delta (ms)</th><th>Suite<br>configuration</th><th>Test<br>configuration</th><th>Class<br>configuration</th><th>Groups<br>configuration</th><th>Method<br>configuration</th><th>Test<br>method</th><th>Thread</th><th>Instances</th></tr>[m
+[31m-<tr bgcolor="f3ddb1">  <td>19/02/11 17:52:01</td>   <td>0</td> <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td title="&gt;&gt;BaseLib.capabilities()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]">&gt;&gt;capabilities</td> [m
+[32m+[m[32m<tr bgcolor="f3ddb1">  <td>19/02/15 16:54:12</td>   <td>0</td> <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td title="&gt;&gt;BaseLib.capabilities()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]">&gt;&gt;capabilities</td>[m[41m [m
+ <td>&nbsp;</td>  <td>main@916419490</td>   <td></td> </tr>[m
+[31m-<tr bgcolor="80ebad">  <td>19/02/11 17:52:08</td>   <td>7220</td> <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td title="AbpHomeTest.fMethod()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]">fMethod</td> [m
+[32m+[m[32m<tr bgcolor="80ebad">  <td>19/02/15 16:54:19</td>   <td>7082</td> <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td title="AbpHomeTest.fMethod()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]">fMethod</td>[m[41m [m
+   <td>main@916419490</td>   <td></td> </tr>[m
+[31m-<tr bgcolor="f3ddb1">  <td>19/02/11 17:52:27</td>   <td>25385</td> <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td title="&lt;&lt;BaseLib.postCondition()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]">&lt;&lt;postCondition</td> [m
+[32m+[m[32m<tr bgcolor="f3ddb1">  <td>19/02/15 16:56:21</td>   <td>129497</td> <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td title="&lt;&lt;BaseLib.postCondition()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]">&lt;&lt;postCondition</td>[m[41m [m
+ <td>&nbsp;</td>  <td>main@916419490</td>   <td></td> </tr>[m
+ </table>[m
+[1mdiff --git a/test-output/old/Default suite/methods.html b/test-output/old/Default suite/methods.html[m
+[1mindex f79f80f..0400d69 100644[m
+[1m--- a/test-output/old/Default suite/methods.html[m	
+[1m+++ b/test-output/old/Default suite/methods.html[m	
+[36m@@ -1,10 +1,10 @@[m
+ <h2>Methods run, sorted chronologically</h2><h3>&gt;&gt; means before, &lt;&lt; means after</h3><p/><br/><em>Default suite</em><p/><small><i>(Hover the method name to see the test class name)</i></small><p/>[m
+ <table border="1">[m
+ <tr><th>Time</th><th>Delta (ms)</th><th>Suite<br>configuration</th><th>Test<br>configuration</th><th>Class<br>configuration</th><th>Groups<br>configuration</th><th>Method<br>configuration</th><th>Test<br>method</th><th>Thread</th><th>Instances</th></tr>[m
+[31m-<tr bgcolor="f3ddb1">  <td>19/02/11 17:52:01</td>   <td>0</td> <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td title="&gt;&gt;BaseLib.capabilities()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]">&gt;&gt;capabilities</td> [m
+[32m+[m[32m<tr bgcolor="f3ddb1">  <td>19/02/15 16:54:12</td>   <td>0</td> <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td title="&gt;&gt;BaseLib.capabilities()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]">&gt;&gt;capabilities</td>[m[41m [m
+ <td>&nbsp;</td>  <td>main@916419490</td>   <td></td> </tr>[m
+[31m-<tr bgcolor="80ebad">  <td>19/02/11 17:52:08</td>   <td>7220</td> <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td title="AbpHomeTest.fMethod()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]">fMethod</td> [m
+[32m+[m[32m<tr bgcolor="80ebad">  <td>19/02/15 16:54:19</td>   <td>7082</td> <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td title="AbpHomeTest.fMethod()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]">fMethod</td>[m[41m [m
+   <td>main@916419490</td>   <td></td> </tr>[m
+[31m-<tr bgcolor="f3ddb1">  <td>19/02/11 17:52:27</td>   <td>25385</td> <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td title="&lt;&lt;BaseLib.postCondition()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]">&lt;&lt;postCondition</td> [m
+[32m+[m[32m<tr bgcolor="f3ddb1">  <td>19/02/15 16:56:21</td>   <td>129497</td> <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td title="&lt;&lt;BaseLib.postCondition()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]">&lt;&lt;postCondition</td>[m[41m [m
+ <td>&nbsp;</td>  <td>main@916419490</td>   <td></td> </tr>[m
+ </table>[m
+[1mdiff --git a/test-output/old/Default suite/reporter-output.html b/test-output/old/Default suite/reporter-output.html[m
+[1mindex f036ceb..f161e44 100644[m
+[1m--- a/test-output/old/Default suite/reporter-output.html[m	
+[1m+++ b/test-output/old/Default suite/reporter-output.html[m	
+[36m@@ -1,3 +1,19 @@[m
+[31m-<h2>Reporter output</h2><table><tr><td>HomeScree Lauched</td></tr>[m
+[31m-<tr><td>pop cliked</td></tr>[m
+[32m+[m[32m<h2>Reporter output</h2><table><tr><td>HomeScreen Lauched</td></tr>[m
+[32m+[m[32m<tr><td>Cliked on Permission Pop</td></tr>[m
+[32m+[m[32m<tr><td>पुलवामा हमला LIVE UPDATES: गृहमंत्री राजनाथ सिंह ने अमर जवानों को दी श्रद्धांजलि, शहीदों को दिया कंधा</td></tr>[m
+[32m+[m[32m<tr><td>Thumb Image Not Found</td></tr>[m
+[32m+[m[32m<tr><td>Seraching The Articles</td></tr>[m
+[32m+[m[32m<tr><td>Back Key Pressed</td></tr>[m
+[32m+[m[32m<tr><td>क्या वाकई एएमयू छात्र ने कहा- हाऊ इज द जैश, ग्रेट सर? जानिए पूरा सच</td></tr>[m
+[32m+[m[32m<tr><td>Thumb Image Not Found</td></tr>[m
+[32m+[m[32m<tr><td>Seraching The Articles</td></tr>[m
+[32m+[m[32m<tr><td>Back Key Pressed</td></tr>[m
+[32m+[m[32m<tr><td>पुलवामा हमला: भारत ने पाकिस्तानी उच्चायुक्त को किया तलब, भारतीय उच्चायुक्त को भी दिल्ली बुलाया</td></tr>[m
+[32m+[m[32m<tr><td>Thumb Image Not Found</td></tr>[m
+[32m+[m[32m<tr><td>Seraching The Articles</td></tr>[m
+[32m+[m[32m<tr><td>Back Key Pressed</td></tr>[m
+[32m+[m[32m<tr><td>देवरिया: शहीद विजय की पत्‍नी को पति पर गर्व, सीएम योगी को बुलाने की मांग पर अड़े ग्रामीण</td></tr>[m
+[32m+[m[32m<tr><td>Thumb Image Not Found</td></tr>[m
+[32m+[m[32m<tr><td>Seraching The Articles</td></tr>[m
+[32m+[m[32m<tr><td>Back Key Pressed</td></tr>[m
+ </table>[m
+\ No newline at end of file[m
+[1mdiff --git a/test-output/testng-results.xml b/test-output/testng-results.xml[m
+[1mindex c7a7aec..1b16193 100644[m
+[1m--- a/test-output/testng-results.xml[m
+[1m+++ b/test-output/testng-results.xml[m
+[36m@@ -2,32 +2,128 @@[m
+ <testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">[m
+   <reporter-output>[m
+     <line>[m
+[31m-      <![CDATA[HomeScree Lauched]]>[m
+[32m+[m[32m      <![CDATA[HomeScreen Lauched]]>[m
+     </line>[m
+     <line>[m
+[31m-      <![CDATA[pop cliked]]>[m
+[32m+[m[32m      <![CDATA[Cliked on Permission Pop]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[पुलवामा हमला LIVE UPDATES: गृहमंत्री राजनाथ सिंह ने अमर जवानों को दी श्रद्धांजलि, शहीदों को दिया कंधा]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[Thumb Image Not Found]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[Seraching The Articles]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[Back Key Pressed]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[क्या वाकई एएमयू छात्र ने कहा- हाऊ इज द जैश, ग्रेट सर? जानिए पूरा सच]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[Thumb Image Not Found]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[Seraching The Articles]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[Back Key Pressed]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[पुलवामा हमला: भारत ने पाकिस्तानी उच्चायुक्त को किया तलब, भारतीय उच्चायुक्त को भी दिल्ली बुलाया]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[Thumb Image Not Found]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[Seraching The Articles]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[Back Key Pressed]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[देवरिया: शहीद विजय की पत्‍नी को पति पर गर्व, सीएम योगी को बुलाने की मांग पर अड़े ग्रामीण]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[Thumb Image Not Found]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[Seraching The Articles]]>[m
+[32m+[m[32m    </line>[m
+[32m+[m[32m    <line>[m
+[32m+[m[32m      <![CDATA[Back Key Pressed]]>[m
+     </line>[m
+   </reporter-output>[m
+[31m-  <suite name="Default suite" duration-ms="25411" started-at="2019-02-11T12:22:01Z" finished-at="2019-02-11T12:22:27Z">[m
+[32m+[m[32m  <suite name="Default suite" duration-ms="129566" started-at="2019-02-15T11:24:12Z" finished-at="2019-02-15T11:26:21Z">[m
+     <groups>[m
+     </groups>[m
+[31m-    <test name="Default test" duration-ms="25411" started-at="2019-02-11T12:22:01Z" finished-at="2019-02-11T12:22:27Z">[m
+[32m+[m[32m    <test name="Default test" duration-ms="129566" started-at="2019-02-15T11:24:12Z" finished-at="2019-02-15T11:26:21Z">[m
+       <class name="com.abp_android.test.AbpHomeTest">[m
+[31m-        <test-method status="PASS" signature="capabilities()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]" name="capabilities" is-config="true" duration-ms="7221" started-at="2019-02-11T12:22:01Z" finished-at="2019-02-11T12:22:08Z">[m
+[32m+[m[32m        <test-method status="PASS" signature="capabilities()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]" name="capabilities" is-config="true" duration-ms="7090" started-at="2019-02-15T11:24:12Z" finished-at="2019-02-15T11:24:19Z">[m
+           <reporter-output>[m
+           </reporter-output>[m
+         </test-method> <!-- capabilities -->[m
+[31m-        <test-method status="PASS" signature="fMethod()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]" name="fMethod" duration-ms="18161" started-at="2019-02-11T12:22:08Z" finished-at="2019-02-11T12:22:27Z">[m
+[32m+[m[32m        <test-method status="PASS" signature="fMethod()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]" name="fMethod" duration-ms="122412" started-at="2019-02-15T11:24:19Z" finished-at="2019-02-15T11:26:21Z">[m
+           <reporter-output>[m
+             <line>[m
+[31m-              <![CDATA[HomeScree Lauched]]>[m
+[32m+[m[32m              <![CDATA[HomeScreen Lauched]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[Cliked on Permission Pop]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[पुलवामा हमला LIVE UPDATES: गृहमंत्री राजनाथ सिंह ने अमर जवानों को दी श्रद्धांजलि, शहीदों को दिया कंधा]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[Thumb Image Not Found]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[Seraching The Articles]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[Back Key Pressed]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[क्या वाकई एएमयू छात्र ने कहा- हाऊ इज द जैश, ग्रेट सर? जानिए पूरा सच]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[Thumb Image Not Found]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[Seraching The Articles]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[Back Key Pressed]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[पुलवामा हमला: भारत ने पाकिस्तानी उच्चायुक्त को किया तलब, भारतीय उच्चायुक्त को भी दिल्ली बुलाया]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[Thumb Image Not Found]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[Seraching The Articles]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[Back Key Pressed]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[देवरिया: शहीद विजय की पत्‍नी को पति पर गर्व, सीएम योगी को बुलाने की मांग पर अड़े ग्रामीण]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[Thumb Image Not Found]]>[m
+[32m+[m[32m            </line>[m
+[32m+[m[32m            <line>[m
+[32m+[m[32m              <![CDATA[Seraching The Articles]]>[m
+             </line>[m
+             <line>[m
+[31m-              <![CDATA[pop cliked]]>[m
+[32m+[m[32m              <![CDATA[Back Key Pressed]]>[m
+             </line>[m
+           </reporter-output>[m
+         </test-method> <!-- fMethod -->[m
+[31m-        <test-method status="PASS" signature="postCondition()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]" name="postCondition" is-config="true" duration-ms="1" started-at="2019-02-11T12:22:27Z" finished-at="2019-02-11T12:22:27Z">[m
+[32m+[m[32m        <test-method status="PASS" signature="postCondition()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]" name="postCondition" is-config="true" duration-ms="1" started-at="2019-02-15T11:26:21Z" finished-at="2019-02-15T11:26:21Z">[m
+           <reporter-output>[m
+           </reporter-output>[m
+         </test-method> <!-- postCondition -->[m

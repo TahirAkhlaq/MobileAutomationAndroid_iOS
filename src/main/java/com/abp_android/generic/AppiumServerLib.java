@@ -3,6 +3,7 @@
  */
 package com.abp_android.generic;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 
@@ -22,13 +23,25 @@ public class AppiumServerLib {
 	private DesiredCapabilities cap;
 	
 	public void startServer() {
+	/*	
+		AppiumServiceBuilder builder = new AppiumServiceBuilder()
+                .withAppiumJS(new File("/home/bluepi/.linuxbrew/Cellar/node/11.9.0/bin/node"));
+                
+		service = builder.build();
+		service.start();*/
+		
+		
+		
+		
+		
+		
 		//Set Capabilities
 		cap = new DesiredCapabilities();
 		cap.setCapability("noReset", "false");
 		
 		//Build the Appium service
-		builder = new AppiumServiceBuilder();
-		builder.withIPAddress("127.0.0.0");
+		builder = new AppiumServiceBuilder();//.withAppiumJS(new File("/usr/bin/node"));
+		builder.withIPAddress("0.0.0.0");
 		builder.usingPort(4723);
 		builder.withCapabilities(cap);
 		builder.withArgument(GeneralServerFlag.SESSION_OVERRIDE);
@@ -37,9 +50,7 @@ public class AppiumServerLib {
 		//Start the server with the builder
 		service = AppiumDriverLocalService.buildService(builder);
 		service.start();
-		//AppiumDriverLocalService 
-		/*service = AppiumDriverLocalService.buildDefaultService();
-		service.start();*/
+	
 	}
 	
 	public void stopServer() {

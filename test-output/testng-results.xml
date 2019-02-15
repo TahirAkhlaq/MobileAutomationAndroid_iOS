@@ -2,32 +2,134 @@
 <testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
   <reporter-output>
     <line>
-      <![CDATA[HomeScree Lauched]]>
+      <![CDATA[HomeScreen Lauched]]>
     </line>
     <line>
-      <![CDATA[pop cliked]]>
+      <![CDATA[Cliked on Permission Pop]]>
+    </line>
+    <line>
+      <![CDATA[headline is :पुलवामा हमला LIVE UPDATES: गृहमंत्री राजनाथ सिंह ने शहीदों को दिया कंधा, पालम एयरपोर्ट पर पीएम मोदी देंगे श्रद्धांजलि]]>
+    </line>
+    <line>
+      <![CDATA[Thumb Image Not Found]]>
+    </line>
+    <line>
+      <![CDATA[Seraching The Articles]]>
+    </line>
+    <line>
+      <![CDATA[Back Key Pressed]]>
+    </line>
+    <line>
+      <![CDATA[headline is :क्या वाकई एएमयू छात्र ने कहा- हाऊ इज द जैश, ग्रेट सर? जानिए पूरा सच]]>
+    </line>
+    <line>
+      <![CDATA[CLick on Thumb Image performed]]>
+    </line>
+    <line>
+      <![CDATA[Category name is उत्तर प्रदेश]]>
+    </line>
+    <line>
+      <![CDATA[Seraching The Articles]]>
+    </line>
+    <line>
+      <![CDATA[Back Key Pressed]]>
+    </line>
+    <line>
+      <![CDATA[headline is :Real-time air quality display on screen]]>
+    </line>
+    <line>
+      <![CDATA[Thumb Image Not Found]]>
+    </line>
+    <line>
+      <![CDATA[Seraching The Articles]]>
+    </line>
+    <line>
+      <![CDATA[Back Key Pressed]]>
+    </line>
+    <line>
+      <![CDATA[headline is :देवरिया: शहीद विजय की पत्‍नी को पति पर गर्व, सीएम योगी को बुलाने की मांग पर अड़े ग्रामीण]]>
+    </line>
+    <line>
+      <![CDATA[Thumb Image Not Found]]>
+    </line>
+    <line>
+      <![CDATA[Seraching The Articles]]>
+    </line>
+    <line>
+      <![CDATA[Back Key Pressed]]>
     </line>
   </reporter-output>
-  <suite name="Default suite" duration-ms="25411" started-at="2019-02-11T12:22:01Z" finished-at="2019-02-11T12:22:27Z">
+  <suite name="Default suite" duration-ms="120179" started-at="2019-02-15T11:30:53Z" finished-at="2019-02-15T11:32:53Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="25411" started-at="2019-02-11T12:22:01Z" finished-at="2019-02-11T12:22:27Z">
+    <test name="Default test" duration-ms="120179" started-at="2019-02-15T11:30:53Z" finished-at="2019-02-15T11:32:53Z">
       <class name="com.abp_android.test.AbpHomeTest">
-        <test-method status="PASS" signature="capabilities()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]" name="capabilities" is-config="true" duration-ms="7221" started-at="2019-02-11T12:22:01Z" finished-at="2019-02-11T12:22:08Z">
+        <test-method status="PASS" signature="capabilities()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]" name="capabilities" is-config="true" duration-ms="7251" started-at="2019-02-15T11:30:53Z" finished-at="2019-02-15T11:31:00Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- capabilities -->
-        <test-method status="PASS" signature="fMethod()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]" name="fMethod" duration-ms="18161" started-at="2019-02-11T12:22:08Z" finished-at="2019-02-11T12:22:27Z">
+        <test-method status="PASS" signature="fMethod()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]" name="fMethod" duration-ms="112898" started-at="2019-02-15T11:31:00Z" finished-at="2019-02-15T11:32:53Z">
           <reporter-output>
             <line>
-              <![CDATA[HomeScree Lauched]]>
+              <![CDATA[HomeScreen Lauched]]>
             </line>
             <line>
-              <![CDATA[pop cliked]]>
+              <![CDATA[Cliked on Permission Pop]]>
+            </line>
+            <line>
+              <![CDATA[headline is :पुलवामा हमला LIVE UPDATES: गृहमंत्री राजनाथ सिंह ने शहीदों को दिया कंधा, पालम एयरपोर्ट पर पीएम मोदी देंगे श्रद्धांजलि]]>
+            </line>
+            <line>
+              <![CDATA[Thumb Image Not Found]]>
+            </line>
+            <line>
+              <![CDATA[Seraching The Articles]]>
+            </line>
+            <line>
+              <![CDATA[Back Key Pressed]]>
+            </line>
+            <line>
+              <![CDATA[headline is :क्या वाकई एएमयू छात्र ने कहा- हाऊ इज द जैश, ग्रेट सर? जानिए पूरा सच]]>
+            </line>
+            <line>
+              <![CDATA[CLick on Thumb Image performed]]>
+            </line>
+            <line>
+              <![CDATA[Category name is उत्तर प्रदेश]]>
+            </line>
+            <line>
+              <![CDATA[Seraching The Articles]]>
+            </line>
+            <line>
+              <![CDATA[Back Key Pressed]]>
+            </line>
+            <line>
+              <![CDATA[headline is :Real-time air quality display on screen]]>
+            </line>
+            <line>
+              <![CDATA[Thumb Image Not Found]]>
+            </line>
+            <line>
+              <![CDATA[Seraching The Articles]]>
+            </line>
+            <line>
+              <![CDATA[Back Key Pressed]]>
+            </line>
+            <line>
+              <![CDATA[headline is :देवरिया: शहीद विजय की पत्‍नी को पति पर गर्व, सीएम योगी को बुलाने की मांग पर अड़े ग्रामीण]]>
+            </line>
+            <line>
+              <![CDATA[Thumb Image Not Found]]>
+            </line>
+            <line>
+              <![CDATA[Seraching The Articles]]>
+            </line>
+            <line>
+              <![CDATA[Back Key Pressed]]>
             </line>
           </reporter-output>
         </test-method> <!-- fMethod -->
-        <test-method status="PASS" signature="postCondition()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]" name="postCondition" is-config="true" duration-ms="1" started-at="2019-02-11T12:22:27Z" finished-at="2019-02-11T12:22:27Z">
+        <test-method status="PASS" signature="postCondition()[pri:0, instance:com.abp_android.test.AbpHomeTest@5f2108b5]" name="postCondition" is-config="true" duration-ms="0" started-at="2019-02-15T11:32:53Z" finished-at="2019-02-15T11:32:53Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- postCondition -->

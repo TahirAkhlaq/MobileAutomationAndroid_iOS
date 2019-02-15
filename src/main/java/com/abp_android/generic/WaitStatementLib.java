@@ -19,7 +19,7 @@ public class WaitStatementLib {
 	
 	public WebDriverWait wait;
 	public FluentWait<WebDriver> fw;
-
+	
 	public void explicitWait(WebDriver driver, int time, WebElement element) {
 		wait = new WebDriverWait(driver, time);
 		wait.until(ExpectedConditions.visibilityOf(element));
@@ -29,4 +29,10 @@ public class WaitStatementLib {
 		driver.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);
 	}
 
+	public void elementVisible(WebElement element) {
+		wait.until(ExpectedConditions.visibilityOf(element));
+	}
+	public void elementClickble(WebElement element) {
+		wait.until(ExpectedConditions.elementToBeClickable(element));
+	}
 }

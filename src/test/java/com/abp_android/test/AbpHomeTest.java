@@ -4,9 +4,6 @@
 package com.abp_android.test;
 
 import org.testng.annotations.Test;
-import java.io.IOException;
-
-import org.testng.annotations.Test;
 
 import com.abp_android.generic.BaseLib;
 import com.abp_android.pom.AbpHomePage;
@@ -19,16 +16,24 @@ public class AbpHomeTest extends BaseLib {
 
 	/**
 	 * @param args
-	 * @throws IOException 
+	 * @throws IOException
 	 */
+	
+
 	@Test
-	public void fMethod() throws IOException {
+	public void fMethod() throws InterruptedException {
 		AbpHomePage ab = new AbpHomePage(driver);
 		wLib.implicitWaitForSeconds(driver, 10);
-	//	ab.clickPopUp(driver);
+		// ab.clickPopUp(driver);
 		ab.article(driver);
-		
-	
+
+	}
+
+//	@Test(priority=1)
+	public void verifyHeaders() throws InterruptedException {
+		AbpHomePage ab = new AbpHomePage(driver);
+		wLib.implicitWaitForSeconds(driver, 10);
+		ab.clickPopUp(driver);
 	}
 
 }
